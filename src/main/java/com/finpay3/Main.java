@@ -5,6 +5,7 @@ package com.finpay3;
 // (powered by FernFlower decompiler)
 //
 
+import jdk.dynalink.beans.StaticClass;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -268,6 +269,9 @@ public class Main {
     static {
         sc = new Scanner(System.in);
     }
+    public static String nameOfTheRapport(String currentMonth){
+        return "rapport_"+currentMonth+".xlsx";
+    }
     public static void rapportMois () throws Exception{
         String sql = "SELECT DATE_FORMAT(factures.date_facture, '%Y-%m') AS mois,\n" +
                 "    prestataires.nom AS Prestataire,\n" +
@@ -298,7 +302,8 @@ public class Main {
 
             if(!month.equals(currentMonth)){
                 if(workbook != null){
-                    String oldFilePath ="C:\\Users\\enaa\\Desktop\\FinPay3\\rapport_"+currentMonth+".xlsx";
+                    String filename = nameOfTheRapport(currentMonth);
+                    String oldFilePath ="C:\\Users\\enaa\\Desktop\\FinPay3\\filename";
                     try(FileOutputStream fileOut = new FileOutputStream(oldFilePath)) {
                         workbook.write(fileOut);
                     }
