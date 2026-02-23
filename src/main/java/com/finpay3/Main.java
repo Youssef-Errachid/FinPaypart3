@@ -95,7 +95,7 @@ public class Main {
             case 3 -> updateFacture();
             case 4 -> deleteFacture();
             case 5 -> searchFacturesByStatut();
-            case 6 -> facturePDF();
+            case 6 -> FactureDAO.facturePDF(sc);
         }
 
     }
@@ -267,56 +267,6 @@ public class Main {
 
     static {
         sc = new Scanner(System.in);
-    }
-    public static void facturePDF(){
-        System.out.println("Entre ID facture : ");
-        int id = sc.nextInt();
-        Facture facture = FactureDAO.findFactureById(id);
-        System.out.println(facture);
-        try (PDDocument document = new PDDocument()) {
-
-            PDPage page = new PDPage();
-            document.addPage(page);
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-            float margin = 50;
-            float y = 700;
-            float leading = 20f;
-
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 22);
-            contentStream.newLineAtOffset(margin, y);
-            contentStream.showText("----FinPay APP----");
-
-            contentStream.setFont(PDType1Font.HELVETICA, 12);
-            contentStream.setLeading(leading);
-
-            contentStream.newLine();
-            contentStream.showText("Facture ID : " + facture.getIdFacture());
-            contentStream.newLine();
-            contentStream.showText("Date : " + facture.getDateFacture());
-            contentStream.newLine();
-            contentStream.showText("Client : " + facture.getClient().getNom() + " (ID: " + facture.getClient().getIdClient() + ")");
-            contentStream.newLine();
-            contentStream.showText("Prestataire : " + facture.getPrestataire().getName() + " (ID: " + facture.getPrestataire().getId() + ")");
-            contentStream.newLine();
-            contentStream.showText("Montant total : " + facture.getMontantTotal());
-            contentStream.newLine();
-            contentStream.showText("Commission : " + (facture.getMontantTotal() * 0.02));
-            contentStream.newLine();
-            contentStream.showText("Status : " + facture.getStatut());
-            contentStream.newLine();
-            contentStream.showText("Merci de votre confiance !");
-            contentStream.endText();
-
-            contentStream.close();
-            document.save("Facture" + facture.getIdFacture() + ".pdf");
-            document.close();
-
-            System.out.println("PDF créé avec succès !");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     public static void rapportMois () throws Exception{
         String sql = "SELECT DATE_FORMAT(factures.date_facture, '%Y-%m') AS mois,\n" +
