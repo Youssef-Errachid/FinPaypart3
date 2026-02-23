@@ -27,4 +27,13 @@ class PaymentDAOTest {
         assertEquals(20,commission,"Calculation doesn't work");
     }
 
+    //this will test the function that create the name of recu document
+    @Test
+    void nameOfRecuDocument(){
+        String nameOfTheDocument = PaymentDAO.nameOfRecuDocument(1);
+        assertEquals("recu_1.pdf",nameOfTheDocument);
+    }
+
+
+
 }
