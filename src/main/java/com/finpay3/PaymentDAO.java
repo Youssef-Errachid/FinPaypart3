@@ -24,10 +24,13 @@ import java.util.List;
 
 public class PaymentDAO {
     static Connection conn = DataBaseConnection.getConnection();
+    public static double calculateCommission(double montant){
+        return montant * 0.02;
+    }
 
-    public static void addPayment(int idFacture, double montantPaye, double commission) {
+    public static void addPayment(int idFacture, double montantPaye) {
         String sql = "INSERT INTO paiements (id_facture, montant_paye, commission_finpay) VALUES (?, ?, ?)";
-
+      double  commission = calculateCommission(montantPaye);
         try (
                 PreparedStatement pstmt = conn.prepareStatement(sql, 1);
         ) {
@@ -52,11 +55,14 @@ public class PaymentDAO {
         }
 
     }
+    public static String nameOfRecuDocument(int id){
+        return "recu_" + id + ".pdf";
+    }
 
     private static void GenerationDunRecuDePaiement(int idPayment, int idFacture, Date date, double montantPaye, double resteAPayer) {
         try {
             Document document = new Document(PageSize.A4);
-            PdfWriter.getInstance(document, new FileOutputStream("recupaiementID_" + idPayment + ".pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(nameOfRecuDocument(idPayment)));
             document.open();
             Font titleFont = new Font(FontFamily.HELVETICA, 18.0F, 1);
             Paragraph title = new Paragraph("Reçu de Paiement", titleFont);
