@@ -211,8 +211,7 @@ public class Main {
         int idFacture = sc.nextInt();
         System.out.println("Enter montant payé:");
         double montant = sc.nextDouble();
-        double commission = montant * 0.02;
-        PaymentDAO.addPayment(idFacture, montant, commission);
+        PaymentDAO.addPayment(idFacture, montant);
     }
 
     public static void displayPayments() {

@@ -24,10 +24,13 @@ import java.util.List;
 
 public class PaymentDAO {
     static Connection conn = DataBaseConnection.getConnection();
+    public static double calculateCommission(double montant){
+        return montant * 0.02;
+    }
 
-    public static void addPayment(int idFacture, double montantPaye, double commission) {
+    public static void addPayment(int idFacture, double montantPaye) {
         String sql = "INSERT INTO paiements (id_facture, montant_paye, commission_finpay) VALUES (?, ?, ?)";
-
+      double  commission = calculateCommission(montantPaye);
         try (
                 PreparedStatement pstmt = conn.prepareStatement(sql, 1);
         ) {
