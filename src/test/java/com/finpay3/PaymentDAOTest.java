@@ -45,8 +45,12 @@ class PaymentDAOTest {
 
         File file = new File("recu_" + idPayment + ".pdf");
         assertTrue(file.exists());
-        file.delete();
 
+    }
+    @AfterAll
+    static void cleanUp(){
+        System.out.println("Clean Up");
+        new File("recu_7.pdf").delete();
     }
 
 }

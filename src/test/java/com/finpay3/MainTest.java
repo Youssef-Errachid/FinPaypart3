@@ -1,5 +1,6 @@
 package com.finpay3;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,11 @@ class MainTest {
             System.out.println(e.getMessage());
         }
         File excel = new File("rapport_"+currentMonth+".xlsx");
-        excel.delete();
 
+    }
+    @AfterAll
+    static void cleanUp(){
+        System.out.println("Clean Up");
+        new File("rapport_2026-02.xlsx").delete();
     }
 }

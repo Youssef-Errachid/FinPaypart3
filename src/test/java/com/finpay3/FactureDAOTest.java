@@ -1,11 +1,13 @@
 package com.finpay3;
 
 import org.junit.internal.runners.statements.FailOnTimeout;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.text.Document;
+import javax.swing.text.FieldView;
 
 import java.io.File;
 import java.util.Scanner;
@@ -40,7 +42,12 @@ class FactureDAOTest {
         facturePDF(id);
         File document = new File("Facture"+id+ ".pdf");
         assertTrue(document.exists());
-        document.delete();
+    }
+
+    @AfterAll
+    static void cleanUp(){
+        System.out.println("Clean Up");
+        new File("Facture1.pdf").delete();
     }
 
 }
