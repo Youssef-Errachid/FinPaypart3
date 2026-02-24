@@ -198,9 +198,7 @@ public class FactureDAO {
     public static String factureName(int id){
         return "facture_"+ id + ".pdf";
     }
-    public static void facturePDF(Scanner sc){
-        System.out.println("Entre ID facture : ");
-        int id = sc.nextInt();
+    public static void facturePDF(int id){
         Facture facture = FactureDAO.findFactureById(id);
         System.out.println(facture);
         try (PDDocument document = new PDDocument()) {
@@ -240,7 +238,8 @@ public class FactureDAO {
             contentStream.endText();
 
             contentStream.close();
-            document.save(factureName(facture.getIdFacture()));
+//            document.save(factureName(facture.getIdFacture()));
+            document.save("Facture"+ facture.getIdFacture() + ".pdf");
             document.close();
 
             System.out.println("PDF créé avec succès !");

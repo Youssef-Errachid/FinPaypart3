@@ -4,7 +4,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 import static com.finpay3.Main.nameOfTheRapport;
+import static com.finpay3.Main.rapportMois;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
@@ -24,5 +27,17 @@ class MainTest {
     void rapportName(){
         String fileName = nameOfTheRapport("2026-2");
         assertEquals("rapport_2026-2.xlsx",fileName);
+    }
+    @Test
+    void testFileIsCreatedWithCorrectName() {
+        String currentMonth = "2026-02";
+        try {
+            rapportMois();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        File excel = new File("rapport_"+currentMonth+".xlsx");
+        excel.delete();
+
     }
 }

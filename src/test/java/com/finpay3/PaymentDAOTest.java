@@ -1,9 +1,12 @@
 package com.finpay3;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.*;
 
+import java.io.File;
+import java.sql.Date;
+
+import static com.finpay3.PaymentDAO.GenerationDunRecuDePaiement;
 import static com.finpay3.PaymentDAO.calculateCommission;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,6 +37,16 @@ class PaymentDAOTest {
         assertEquals("recu_1.pdf",nameOfTheDocument);
     }
 
+    @Test
+    public void testFileIsCreatedWithCorrectName() {
+        int idPayment = 7;
 
+        GenerationDunRecuDePaiement(7, 3, new Date(2026-02-24), 1000.0, 500.0);
+
+        File file = new File("recu_" + idPayment + ".pdf");
+        assertTrue(file.exists());
+        file.delete();
+
+    }
 
 }
