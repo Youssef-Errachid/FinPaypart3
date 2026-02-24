@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Scanner;
 
+import static com.finpay3.FactureDAO.facturePDF;
+
 public class Main {
     static Scanner sc;
 
@@ -96,9 +98,14 @@ public class Main {
             case 3 -> updateFacture();
             case 4 -> deleteFacture();
             case 5 -> searchFacturesByStatut();
-            case 6 -> FactureDAO.facturePDF(sc);
+            case 6 -> facturePDF();
         }
 
+    }
+    public static void facturePDF(){
+        System.out.println("Entre ID facture : ");
+        int id = sc.nextInt();
+        FactureDAO.facturePDF(id);
     }
 
     private static void searchFacturesByStatut() {
@@ -302,8 +309,8 @@ public class Main {
 
             if(!month.equals(currentMonth)){
                 if(workbook != null){
-                    String filename = nameOfTheRapport(currentMonth);
-                    String oldFilePath ="C:\\Users\\enaa\\Desktop\\FinPay3\\filename";
+                   // String filename = nameOfTheRapport(currentMonth);
+                    String oldFilePath ="C:\\Users\\enaa\\Desktop\\FinPay3\\rapport_"+ currentMonth + ".xlsx";
                     try(FileOutputStream fileOut = new FileOutputStream(oldFilePath)) {
                         workbook.write(fileOut);
                     }
