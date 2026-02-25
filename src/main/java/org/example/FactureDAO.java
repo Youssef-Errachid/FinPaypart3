@@ -1,6 +1,9 @@
+package org.example;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FactureDAO {
     public static void addFacture(int idClient, int idPrestataire, double montant, Statut statut, Date dateFacture) {
@@ -17,7 +20,7 @@ public class FactureDAO {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public static void getAllFactures() {
+    public static List<Facture> getAllFactures() {
         List<Facture> factures = new ArrayList<>();
         String sql = "SELECT * FROM factures";
         try (Connection conn = databaseConnection.getConnection();
@@ -32,7 +35,7 @@ public class FactureDAO {
                         rs.getDate("date_facture"),
                         rs.getTimestamp("date_creation")
                 ));
-            }
+            }return factures;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -44,10 +47,10 @@ public class FactureDAO {
             System.out.println("Invoice date: " + f.getDateFacture());
             System.out.println("Status Payment: " + f.getStatut());
             System.out.println("-----------------------------------------");
-        }
+        }return null;
     }
 
-    public static void updateFactureStatut(int id, Statut newStatut) {
+    public static Statut updateFactureStatut(int id, Statut newStatut) {
         String sql = "UPDATE factures SET statut=? WHERE id_facture=?";
         try (Connection conn = databaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -56,6 +59,7 @@ public class FactureDAO {
             ps.executeUpdate();
             System.out.println("Facture statut updated successfully!");
         } catch (SQLException e) { e.printStackTrace(); }
+        return Objects.requireNonNull(findFactureById(id)).getStatut();
     }
 
     public static void deleteFacture(int id) {
@@ -105,13 +109,15 @@ public class FactureDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
+//                int clientId = ;
+                int prestataireId = rs.getInt("id_prestataire");
                 return new Facture(
                         rs.getInt("id_facture"),
-                        null,
-                        null,
+                        ClientDAO.findClientById(rs.getInt("id_client")),
+                        PrestataireDAO.findById(prestataireId),
                         rs.getDouble("montant_total"),
-                        Statut.valueOf(rs.getString("statut")),
-                        rs.getDate("date_facture"),
+                        Statut.valueOf(rs.getString("statut").toUpperCase()),
+                        rs.getDate("date_Facture"),
                         rs.getTimestamp("date_creation")
                 );
             }

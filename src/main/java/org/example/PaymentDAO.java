@@ -1,3 +1,5 @@
+package org.example;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -5,8 +7,9 @@ import java.util.List;
 public class PaymentDAO {
 
 
-    public static void addPayment(int idFacture, double montantPaye, double commission) {
+    public static void addPayment(int idFacture, double montantPaye, double commission, Statut status) throws SQLException{
         String sql = "INSERT INTO paiements (id_facture, montant_paye, commission_finpay) VALUES (?, ?, ?)";
+        FactureDAO.updateFactureStatut(idFacture,status);
 
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -45,7 +48,6 @@ public class PaymentDAO {
         } catch (SQLException e) {
             System.err.println("Error displaying payments: " + e.getMessage());
         }
-
 
         System.out.println("=========All Payments========= \n");
         for(Payment p: payments){

@@ -1,3 +1,5 @@
+package org.example;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +60,7 @@ public class ClientDAO {
         }
     }
 
-    public static void findClientById(int id) {
+    public static Client findClientById(int id) {
         String sql = "SELECT * FROM clients WHERE id_client=?";
         try (Connection conn = databaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) { ps.setInt(1, id);
@@ -67,6 +69,10 @@ public class ClientDAO {
                 System.out.println("=============Client=============");
                 System.out.println( "Client id: " + rs.getInt("id_client"));
                 System.out.println( "Client name: "+ rs.getString("nom"));
+
+                return new Client(
+                        rs.getInt("id_client"),
+                        rs.getString("nom"));
             }
             else {
                 System.out.println("Client not found");
@@ -74,8 +80,10 @@ public class ClientDAO {
         }
         catch (SQLException e) { e.printStackTrace();
         }
+        return null;
 
-    }  public static void findClientByName(String name) {
+    }
+    public static void findClientByName(String name) {
         String sql = "SELECT * FROM clients WHERE nom=?";
         try (Connection conn = databaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) { ps.setString(1,name);

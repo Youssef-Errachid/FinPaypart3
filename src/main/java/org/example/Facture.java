@@ -1,3 +1,5 @@
+package org.example;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -7,6 +9,7 @@ public class Facture {
     private Prestataire prestataire;
     private double montantTotal;
     private Statut statut;
+    private double restPayer;
     private Date dateFacture;
     private Timestamp dateCreation;
 
@@ -19,6 +22,25 @@ public class Facture {
         this.statut = statut;
         this.dateFacture = dateFacture;
         this.dateCreation = dateCreation;
+    }
+
+    public Facture(int idFacture, Client client, Prestataire prestataire, double montantTotal, Statut statut, double restPayer, Date dateFacture, Timestamp dateCreation) {
+        this.idFacture = idFacture;
+        this.client = client;
+        this.prestataire = prestataire;
+        this.montantTotal = montantTotal;
+        this.statut = statut;
+        this.restPayer = restPayer;
+        this.dateFacture = dateFacture;
+        this.dateCreation = dateCreation;
+    }
+
+    public double getRestPayer() {
+        return restPayer;
+    }
+
+    public void setRestPayer(double restPayer) {
+        this.restPayer = restPayer;
     }
 
     public int getIdFacture() {

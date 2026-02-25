@@ -1,3 +1,5 @@
+package org.example;
+
 public class Client {
     private int idClient;
     private String nom;

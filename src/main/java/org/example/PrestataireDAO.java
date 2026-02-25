@@ -1,4 +1,9 @@
-import java.sql.*;
+package org.example;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +25,7 @@ public class PrestataireDAO {
     }
 
     // lister tous les prestataires
-    public static void findAll() {
+    public static List<Prestataire> findAll() {
 
         List <Prestataire> prestataires = new ArrayList<>();
         String sql= "SELECT * FROM prestataires";
@@ -41,12 +46,12 @@ public class PrestataireDAO {
             System.out.println("Prestataire id: " + p.getId());
             System.out.println("Prestataire name: " + p.getName());
             System.out.println("-----------------------------------------");
-        }
+        }return prestataires;
     }
 
     // rechercher prestataire par id
 
-    public static void findById(int id) {
+    public static Prestataire findById(int id) {
         String sql = "SELECT * FROM prestataires WHERE id_prestataire=?";
         try (Connection conn = databaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -56,11 +61,18 @@ public class PrestataireDAO {
                 System.out.println("=============Prestataire=============");
                 System.out.println( "prestataire id: " + rs.getInt("id_prestataire"));
                 System.out.println( "prestataire name: "+ rs.getString("nom"));
+
+                return new Prestataire(
+                        rs.getInt("id_prestataire"),
+                        rs.getString("nom")
+                );
+
             }
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
     public static void findByName(String name) {
         String sql = "SELECT * FROM prestataires WHERE nom=?";
