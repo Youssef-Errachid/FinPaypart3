@@ -195,9 +195,6 @@ public class FactureDAO {
             return (double)0.0F;
         }
     }
-    public static String factureName(int id){
-        return "facture_"+ id + ".pdf";
-    }
     public static void facturePDF(int id){
         Facture facture = FactureDAO.findFactureById(id);
         System.out.println(facture);
@@ -238,7 +235,6 @@ public class FactureDAO {
             contentStream.endText();
 
             contentStream.close();
-//            document.save(factureName(facture.getIdFacture()));
             document.save("Facture"+ facture.getIdFacture() + ".pdf");
             document.close();
 

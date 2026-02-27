@@ -276,9 +276,6 @@ public class Main {
     static {
         sc = new Scanner(System.in);
     }
-    public static String nameOfTheRapport(String currentMonth){
-        return "rapport_"+currentMonth+".xlsx";
-    }
     public static void rapportMois () throws Exception{
         String sql = "SELECT DATE_FORMAT(factures.date_facture, '%Y-%m') AS mois,\n" +
                 "    prestataires.nom AS Prestataire,\n" +
@@ -309,7 +306,6 @@ public class Main {
 
             if(!month.equals(currentMonth)){
                 if(workbook != null){
-                   // String filename = nameOfTheRapport(currentMonth);
                     String oldFilePath ="C:\\Users\\enaa\\Desktop\\FinPay3\\rapport_"+ currentMonth + ".xlsx";
                     try(FileOutputStream fileOut = new FileOutputStream(oldFilePath)) {
                         workbook.write(fileOut);

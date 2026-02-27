@@ -55,14 +55,11 @@ public class PaymentDAO {
         }
 
     }
-    public static String nameOfRecuDocument(int id){
-        return "recu_" + id + ".pdf";
-    }
+
 
     static void GenerationDunRecuDePaiement(int idPayment, int idFacture, Date date, double montantPaye, double resteAPayer) {
         try {
             Document document = new Document(PageSize.A4);
-            // PdfWriter.getInstance(document, new FileOutputStream(nameOfRecuDocument(idPayment)));
             PdfWriter.getInstance(document, new FileOutputStream("recu_"+ idPayment + ".pdf"));
             document.open();
             Font titleFont = new Font(FontFamily.HELVETICA, 18.0F, 1);
