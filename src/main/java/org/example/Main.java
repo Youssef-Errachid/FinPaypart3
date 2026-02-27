@@ -42,6 +42,7 @@ public class Main {
                 case 4 -> gestionPrestataires();
                 case 5 -> Historique();
                 case 6 -> rapportMois();
+                case 7 -> calculerTotalPrestataire(1);
                 default -> System.out.println("Invalid choice!");
             }
             System.out.println("Retour au menu principal ? y/n");
@@ -657,7 +658,74 @@ public class Main {
         double total = factures.stream().filter(p-> p.getPrestataire().getId()==id)
                 .mapToDouble(Facture::getMontantTotal)
                 .sum();
+        System.out.println(total);
         return total;
+    }
+
+    public static void rapportMois(String currentMonth) {
+        String sql = "SELECT DATE_FORMAT(f.date_facture, '%Y-%m') AS mois, " +
+                "p.nom AS Prestataire, " +
+                "COUNT(f.id_facture) AS Nombre_Factures, " +
+                "SUM(f.montant_total) AS Total_Généré, " +
+                "SUM(f.montant_total) * 0.02 AS Total_Commissions " +
+                "FROM prestataires p " +
+                "JOIN factures f ON f.id_prestataire = p.id_prestataire " +
+                "GROUP BY DATE_FORMAT(f.date_facture, '%Y-%m'), p.nom, p.id_prestataire " +
+                "ORDER BY mois;";
+
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            Workbook workbook = null;
+            Sheet sheet = null;
+            int rowNumber = 0;
+
+            while (rs.next()) {
+                String mois = rs.getString("mois");
+
+                if (!mois.equals(currentMonth)) {
+
+                    if (workbook != null) {
+                        String oldFileName = "rapport_" + currentMonth + ".xlsx";
+                        try (FileOutputStream fileOut = new FileOutputStream(oldFileName)) {
+                            workbook.write(fileOut);
+                        }
+                        workbook.close();
+                    }
+
+                    currentMonth = mois;
+                    workbook = new XSSFWorkbook();
+                    sheet = workbook.createSheet("Rapport " + mois);
+                    rowNumber = 0;
+
+                    String[] headers = {"Prestataire", "Nombre Factures", "Total Généré", "Total Commissions"};
+                    Row headerRow = sheet.createRow(rowNumber++);
+                    for (int i = 0; i < headers.length; i++) {
+                        headerRow.createCell(i).setCellValue(headers[i]);
+                    }
+                }
+
+                Row row = sheet.createRow(rowNumber++);
+                row.createCell(0).setCellValue(rs.getString("Prestataire"));
+                row.createCell(1).setCellValue(rs.getInt("Nombre_Factures"));
+                row.createCell(2).setCellValue(rs.getDouble("Total_Généré"));
+                row.createCell(3).setCellValue(rs.getDouble("Total_Commissions"));
+            }
+
+            if (workbook != null) {
+                String fileName = "rapport_" + currentMonth + ".xlsx";
+                try (FileOutputStream fileOut = new FileOutputStream(fileName)) {
+                    workbook.write(fileOut);
+                }
+                workbook.close();
+            }
+
+            System.out.println("Rapports générés avec succès.");
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

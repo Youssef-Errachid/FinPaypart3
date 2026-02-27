@@ -58,6 +58,13 @@ public class PrestataireDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
+                return new Prestataire(
+                        rs.getInt("id_prestataire"),
+                        rs.getString("nom")
+                );
+
+            }
+            if (rs.next()) {
                 System.out.println("=============Prestataire=============");
                 System.out.println( "prestataire id: " + rs.getInt("id_prestataire"));
                 System.out.println( "prestataire name: "+ rs.getString("nom"));

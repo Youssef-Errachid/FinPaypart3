@@ -66,6 +66,10 @@ public class ClientDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) { ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
+                return new Client(
+                        rs.getInt("id_client"),
+                        rs.getString("nom"));}
+            if (rs.next()){
                 System.out.println("=============Client=============");
                 System.out.println( "Client id: " + rs.getInt("id_client"));
                 System.out.println( "Client name: "+ rs.getString("nom"));
