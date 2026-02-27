@@ -1,10 +1,5 @@
 package com.finpay3;
 
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

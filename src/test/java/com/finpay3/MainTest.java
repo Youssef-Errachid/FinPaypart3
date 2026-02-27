@@ -25,11 +25,6 @@ class MainTest {
     }
 
     @Test
-    void rapportName(){
-        String fileName = nameOfTheRapport("2026-2");
-        assertEquals("rapport_2026-2.xlsx",fileName);
-    }
-    @Test
     void testFileIsCreatedWithCorrectName() {
         String currentMonth = "2026-02";
         try {

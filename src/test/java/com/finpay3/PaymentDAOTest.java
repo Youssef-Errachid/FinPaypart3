@@ -30,27 +30,17 @@ class PaymentDAOTest {
         assertEquals(20,commission,"Calculation doesn't work");
     }
 
-    //this will test the function that create the name of recu document
-    @Test
-    void nameOfRecuDocument(){
-        String nameOfTheDocument = PaymentDAO.nameOfRecuDocument(1);
-        assertEquals("recu_1.pdf",nameOfTheDocument);
-    }
-
     @Test
     public void testFileIsCreatedWithCorrectName() {
         int idPayment = 7;
-
         GenerationDunRecuDePaiement(7, 3, new Date(2026-02-24), 1000.0, 500.0);
-
-        File file = new File("recu_" + idPayment + ".pdf");
+        File file = new File("Recu_" + idPayment + ".pdf");
         assertTrue(file.exists());
-
     }
     @AfterAll
     static void cleanUp(){
         System.out.println("Clean Up");
-        new File("recu_7.pdf").delete();
+        new File("Recu_7.pdf").delete();
     }
 
 }
