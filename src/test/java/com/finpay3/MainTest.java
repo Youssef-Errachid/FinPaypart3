@@ -7,9 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static com.finpay3.Main.nameOfTheRapport;
 import static com.finpay3.Main.rapportMois;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
     // this will start before all testes.

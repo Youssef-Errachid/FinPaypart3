@@ -48,7 +48,7 @@ public class Facture {
         this.prestataire = prestataire;
     }
 
-    public static double getMontantTotal() {
+    public double getMontantTotal() {
         return montantTotal;
     }
 
