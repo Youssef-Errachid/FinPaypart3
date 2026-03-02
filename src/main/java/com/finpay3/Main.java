@@ -18,6 +18,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
+import java.util.List;
 import java.util.Scanner;
 
 import static com.finpay3.FactureDAO.facturePDF;
@@ -275,6 +276,14 @@ public class Main {
 
     static {
         sc = new Scanner(System.in);
+    }
+    public static double calculerTotalPrestataire(int id){
+        List<Facture> factures = FactureDAO.getAllFactures();
+        double total = factures.stream().filter(p-> p.getPrestataire().getId()==id)
+                .mapToDouble(Facture::getMontantTotal)
+                .sum();
+        System.out.println(total);
+        return total;
     }
     public static void rapportMois () throws Exception{
         String sql = "SELECT DATE_FORMAT(factures.date_facture, '%Y-%m') AS mois,\n" +

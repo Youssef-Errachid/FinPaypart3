@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Objects;
 
 public class FactureDAO {
     static Connection conn = DataBaseConnection.getConnection();
@@ -33,7 +33,7 @@ public class FactureDAO {
 
     }
 
-    public static void getAllFactures() {
+    public static List<Facture> getAllFactures() {
         List<Facture> factures = new ArrayList();
         String sql = "SELECT * FROM factures";
 
@@ -52,29 +52,26 @@ public class FactureDAO {
 
         for(Facture f : factures) {
             System.out.println("Facture id: " + f.getIdFacture());
-            System.out.println("Amount operation: " + Facture.getMontantTotal());
+            System.out.println("Amount operation: " + f.getMontantTotal());
             System.out.println("Creation date: " + String.valueOf(f.getDateCreation()));
             System.out.println("Invoice date: " + String.valueOf(f.getDateFacture()));
             System.out.println("Status Payment: " + String.valueOf(f.getStatut()));
             System.out.println("-----------------------------------------");
         }
 
+        return factures;
     }
 
-    public static void updateFactureStatut(int id, Statut newStatut) {
+    public static Statut updateFactureStatut(int id, Statut newStatut) {
         String sql = "UPDATE factures SET statut=? WHERE id_facture=?";
-
-        try (
-                PreparedStatement ps = conn.prepareStatement(sql);
-        ) {
+        try (Connection conn = DataBaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, newStatut.name());
             ps.setInt(2, id);
             ps.executeUpdate();
             System.out.println("Facture statut updated successfully!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        } catch (SQLException e) { e.printStackTrace(); }
+        return Objects.requireNonNull(findFactureById(id)).getStatut();
     }
 
     public static void deleteFacture(int id) {
@@ -113,7 +110,7 @@ public class FactureDAO {
 
         for(Facture f : factures) {
             System.out.println("facture id: " + f.getIdFacture());
-            System.out.println("montant total: " + Facture.getMontantTotal());
+            System.out.println("montant total: " + f.getMontantTotal());
             System.out.println("facture status: " + String.valueOf(f.getStatut()));
             System.out.println("Date creation: " + String.valueOf(f.getDateCreation()));
             System.out.println("-----------------------------------------");
@@ -243,5 +240,38 @@ public class FactureDAO {
             e.printStackTrace();
         }
     }
+    public static List<Facture> findFacturePrestataire(int id) {
+        List<Facture> factures = new ArrayList<>();
+        String sql = "SELECT * FROM factures WHERE id_prestataire=?";
+        try (Connection conn = DataBaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                factures.add(new Facture(
+                        rs.getInt("id_facture"),
+                        ClientDAO.findClientById(rs.getInt("id_client")),
+                        PrestataireDAO.findById(rs.getInt("id_prestataire")),
+                        rs.getDouble("montant_total"),
+                        Statut.valueOf(rs.getString("statut")),
+                        rs.getDate("date_facture"),
+                        rs.getTimestamp("date_creation")
+                ));
+            }return factures;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("=========All Factures========= \n");
+        for (Facture f : factures) {
+            System.out.println("Facture id: " + f.getIdFacture());
+            System.out.println("Amount operation: " + f.getMontantTotal());
+            System.out.println("Creation date: " + f.getDateCreation());
+            System.out.println("Invoice date: " + f.getDateFacture());
+            System.out.println("Status Payment: " + f.getStatut());
+            System.out.println("-----------------------------------------");
+        }return factures;
+    }
+
 
 }
